@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Mock Data - In real app, these could be cloud images
+// Mock Data - Place images/videos in public/assets/carousel/
+// Example: media: "/assets/carousel/solar-park.jpg"
 const CAROUSEL_ITEMS = [
-    { id: 1, text: "Sustainable Energy Grids", color: "bg-blue-500" },
-    { id: 2, text: "Efficient Public Transport", color: "bg-green-500" },
-    { id: 3, text: "Clean Water Systems", color: "bg-teal-500" },
-    { id: 4, text: "Urban Green Spaces", color: "bg-emerald-500" },
-    { id: 5, text: "Waste Management Solutions", color: "bg-cyan-500" },
+    { id: 1, text: "Sustainable Energy Grids", color: "bg-blue-500", media: null },
+    { id: 2, text: "Efficient Public Transport", color: "bg-green-500", media: null },
+    { id: 3, text: "Clean Water Systems", color: "bg-teal-500", media: null },
+    { id: 4, text: "Urban Green Spaces", color: "bg-emerald-500", media: null },
+    { id: 5, text: "Waste Management Solutions", color: "bg-cyan-500", media: null },
 ];
 
 export default function VisionCarousel() {
@@ -22,6 +23,8 @@ export default function VisionCarousel() {
         return () => clearInterval(timer);
     }, []);
 
+    const currentItem = CAROUSEL_ITEMS[index];
+
     return (
         <div className="relative h-screen w-full overflow-hidden bg-gray-900">
             <AnimatePresence mode="wait">
@@ -31,20 +34,39 @@ export default function VisionCarousel() {
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 1 }}
-                    className={`absolute inset-0 flex items-center justify-center ${CAROUSEL_ITEMS[index].color}`}
+                    className={`absolute inset-0 flex items-center justify-center ${!currentItem.media ? currentItem.color : 'bg-black'}`}
                 >
-                    {/* Placeholder for Image - Using color blocks for valid MVP without assets */}
-                    <div className="absolute inset-0 opacity-50 bg-black/40" />
+                    {/* Media Rendering Logic */}
+                    {currentItem.media && (
+                        currentItem.media.endsWith('.mp4') ? (
+                            <video
+                                src={currentItem.media}
+                                autoPlay
+                                muted
+                                loop
+                                className="absolute inset-0 w-full h-full object-cover opacity-70"
+                            />
+                        ) : (
+                            <img
+                                src={currentItem.media}
+                                alt={currentItem.text}
+                                className="absolute inset-0 w-full h-full object-cover opacity-70"
+                            />
+                        )
+                    )}
+
+                    {/* Fallback & Overlay */}
+                    {!currentItem.media && <div className="absolute inset-0 opacity-50 bg-black/40" />}
 
                     <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.5 }}
-                        className="z-10 p-8 text-center"
+                        className="z-10 p-8 text-center relative"
                     >
                         <div className="bg-white/10 backdrop-blur-md p-6 rounded-xl border border-white/20 shadow-2xl">
                             <h2 className="text-4xl md:text-6xl font-bold text-white tracking-wide drop-shadow-lg">
-                                {CAROUSEL_ITEMS[index].text}
+                                {currentItem.text}
                             </h2>
                         </div>
                     </motion.div>
