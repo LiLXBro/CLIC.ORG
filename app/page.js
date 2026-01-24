@@ -1,6 +1,8 @@
 import dynamic from 'next/dynamic';
 import VisionCarousel from '@/components/VisionCarousel';
 import Mission from '@/components/Mission';
+import VisionMission from '@/components/VisionMission';
+import DiversityCarousel from '@/components/DiversityCarousel';
 import RegistrationForm from '@/components/RegistrationForm';
 import { getChampions } from './actions';
 
@@ -17,10 +19,16 @@ export default async function Home() {
     return (
         <main className="min-h-screen flex flex-col">
             {/* 1. Vision Carousel (Hero) */}
-            <VisionCarousel />
+            {/* 1. Diversity Carousel (The Journey) */}
+            <DiversityCarousel />
 
-            {/* 2. Mission Section */}
-            <Mission />
+            {/* 2. Vision & Mission Section (New) */}
+            <VisionMission />
+
+            {/* 
+            <VisionCarousel />
+            <Mission /> 
+            */}
 
             {/* 3. Map & Registration Section */}
             <section className="py-20 px-4 max-w-7xl mx-auto w-full">
